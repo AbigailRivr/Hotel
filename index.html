@@ -455,18 +455,17 @@
             >
             <span class="error" id="nombreErr" role="alert"></span>
           </div>
-
           <div class="field">
-            <label for="hotel">Nombre del hotel</label>
-            <input
-              id="hotel"
-              name="hotel"
-              type="text"
-              autocomplete="organization"
-              required
-            >
-            <span class="error" id="hotelErr" role="alert"></span>
-          </div>
+          <label for="ci">Carnet de identidad (CI)</label>
+          <input
+            id="ci"
+            name="CI"
+            type="text"
+            autocomplete="off"
+            required
+          >
+        </div>
+
 
           <div class="field">
             <label for="email">Correo de contacto</label>
@@ -479,6 +478,20 @@
             >
             <span class="error" id="emailErr" role="alert"></span>
           </div>
+          
+          <div class="field">
+            <label for="contrasena">Contraseña</label>
+            <input
+              id="contrasena"
+              name="contrasena"
+              type="password"
+              autocomplete="new-password"
+              minlength="8"
+              required
+            >
+            <span class="error" id="contrasenaErr" role="alert"></span>
+          </div>
+
 
           <div class="field">
             <label for="perfil">¿Cuál es tu perfil?</label>
@@ -571,8 +584,6 @@
     </div>
   </footer>
 
-  <!-- Supabase debe cargarse antes de script.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 
 </body>

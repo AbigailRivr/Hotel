@@ -1,4 +1,3 @@
-const FORMSPREE_URL = "https://formspree.io/f/xoeejqld";
 
 document.addEventListener("DOMContentLoaded", () => {
   const $ = (selector, parent = document) => parent.querySelector(selector);
@@ -971,21 +970,23 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
     }
 
- 
-function renderRooms() {
-    const floors = [1, 2, 3];
+    function renderRooms() {
+      const floors = [1, 2, 3];
 
-    const floorHtml = floors.map(floor => {
-        const floorRooms = rooms.filter(room => room.floor === floor);
+      const floorHtml = floors
+        .map((floor) => {
+          const floorRooms = rooms.filter((room) => room.floor === floor);
 
-        return `
+          return `
             <div class="proto-floor-label">
                 <span>Piso ${floor}</span>
                 <small>${floorRooms.length} habitaciones</small>
             </div>
 
             <div class="proto-room-grid">
-                ${floorRooms.map(room => `
+                ${floorRooms
+                  .map(
+                    (room) => `
                     <div class="proto-room" data-room-click="${room.number}" style="cursor:pointer">
                         <div class="proto-room-number">
                             <span>${room.number}</span>
@@ -1004,12 +1005,15 @@ function renderRooms() {
                             ${money(room.price)} / noche
                         </div>
                     </div>
-                `).join("")}
+                `,
+                  )
+                  .join("")}
             </div>
         `;
-    }).join("");
+        })
+        .join("");
 
-    content.innerHTML = `
+      content.innerHTML = `
         <div class="proto-page-title">
             <div>
                 <h3>Habitaciones</h3>
@@ -1034,19 +1038,23 @@ function renderRooms() {
 
             <div class="proto-filter-row">
                 ${[
-                    "Todas",
-                    "Disponible",
-                    "Ocupada",
-                    "En limpieza",
-                    "Mantenimiento"
-                ].map(filter => `
+                  "Todas",
+                  "Disponible",
+                  "Ocupada",
+                  "En limpieza",
+                  "Mantenimiento",
+                ]
+                  .map(
+                    (filter) => `
                     <button
                         type="button"
                         class="proto-filter ${activeRoomFilter === filter ? "active" : ""}"
                         data-room-filter="${filter}">
                         ${filter}
                     </button>
-                `).join("")}
+                `,
+                  )
+                  .join("")}
             </div>
 
             <div id="protoRoomFloors">
@@ -1061,15 +1069,17 @@ function renderRooms() {
         </p>
     `;
 
-    if (activeRoomFilter !== "Todas") {
+      if (activeRoomFilter !== "Todas") {
         const matchingRooms = rooms.filter(
-            room => room.status === activeRoomFilter
+          (room) => room.status === activeRoomFilter,
         );
 
         $("#protoRoomFloors").innerHTML = matchingRooms.length
-            ? `
+          ? `
                 <div class="proto-room-grid">
-                    ${matchingRooms.map(room => `
+                    ${matchingRooms
+                      .map(
+                        (room) => `
                         <div class="proto-room"
                              data-room-click="${room.number}"
                              style="cursor:pointer">
@@ -1089,48 +1099,50 @@ function renderRooms() {
                                 ${money(room.price)} / noche
                             </div>
                         </div>
-                    `).join("")}
+                    `,
+                      )
+                      .join("")}
                 </div>
             `
-            : `<div class="proto-empty">No hay habitaciones con este estado.</div>`;
-    }
+          : `<div class="proto-empty">No hay habitaciones con este estado.</div>`;
+      }
 
-    $$("[data-room-filter]", content).forEach(button => {
+      $$("[data-room-filter]", content).forEach((button) => {
         button.addEventListener("click", () => {
-            activeRoomFilter = button.dataset.roomFilter;
-            renderRooms();
+          activeRoomFilter = button.dataset.roomFilter;
+          renderRooms();
         });
-    });
+      });
 
-    const showAll = $("#protoShowAllRooms");
+      const showAll = $("#protoShowAllRooms");
 
-    if (showAll) {
+      if (showAll) {
         showAll.addEventListener("click", () => {
-            activeRoomFilter = "Todas";
-            renderRooms();
+          activeRoomFilter = "Todas";
+          renderRooms();
         });
-    }
+      }
 
-    $$("[data-room-click]", content).forEach(card => {
+      $$("[data-room-click]", content).forEach((card) => {
         card.addEventListener("click", () => {
-            const room = roomByNumber(card.dataset.roomClick);
+          const room = roomByNumber(card.dataset.roomClick);
 
-            if (!room) return;
+          if (!room) return;
 
-            const states = [
-                "Disponible",
-                "Ocupada",
-                "En limpieza",
-                "Mantenimiento"
-            ];
+          const states = [
+            "Disponible",
+            "Ocupada",
+            "En limpieza",
+            "Mantenimiento",
+          ];
 
-            const currentIndex = states.indexOf(room.status);
-            room.status = states[(currentIndex + 1) % states.length];
+          const currentIndex = states.indexOf(room.status);
+          room.status = states[(currentIndex + 1) % states.length];
 
-            renderRooms();
+          renderRooms();
         });
-    });
-}
+      });
+    }
 
     function renderReservations() {
       const filtered =
@@ -1501,7 +1513,7 @@ function renderRooms() {
     renderScreen("habitaciones");
   }
 
-  // Formulario de contacto con Formspree
+  // Formulario de registro de HotelFlow
   const demoForm = $("#demoForm");
 
   if (demoForm) {
@@ -1509,23 +1521,24 @@ function renderRooms() {
       event.preventDefault();
 
       const nombre = $("#nombre");
-      const hotel = $("#hotel");
+      const ci = $("#ci");
       const email = $("#email");
-      const perfil = $("#perfil");
-      const necesidad = $("#necesidad");
-      const interes = $("#interes");
-      const plan = $("#plan");
+      const contrasena = $("#contrasena");
       const submitBtn = $("#submitBtn");
       const formOk = $("#formOk");
 
+      if (formOk) {
+        formOk.hidden = true;
+        formOk.textContent = "";
+      }
+
       const nombreErr = $("#nombreErr");
-      const hotelErr = $("#hotelErr");
       const emailErr = $("#emailErr");
+      const contrasenaErr = $("#contrasenaErr");
 
       if (nombreErr) nombreErr.textContent = "";
-      if (hotelErr) hotelErr.textContent = "";
       if (emailErr) emailErr.textContent = "";
-      if (formOk) formOk.textContent = "";
+      if (contrasenaErr) contrasenaErr.textContent = "";
 
       let valid = true;
 
@@ -1534,67 +1547,76 @@ function renderRooms() {
         valid = false;
       }
 
-      if (!hotel || !hotel.value.trim()) {
-        if (hotelErr) hotelErr.textContent = "Ingresa el nombre de tu hotel.";
+      if (!ci || !ci.value.trim()) {
+        if (formOk) {
+          formOk.textContent = "Ingresa tu carnet de identidad (CI).";
+          formOk.hidden = false;
+        }
         valid = false;
       }
 
-      if (
-        !email ||
-        !email.value.trim() ||
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())
-      ) {
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
         if (emailErr) emailErr.textContent = "Ingresa un correo valido.";
+        valid = false;
+      }
+
+      if (!contrasena || contrasena.value.length < 8) {
+        if (contrasenaErr) {
+          contrasenaErr.textContent =
+            "La contraseña debe tener al menos 8 caracteres.";
+        }
         valid = false;
       }
 
       if (!valid) return;
 
-      const data = {
-        nombre: nombre.value.trim(),
-        hotel: hotel.value.trim(),
-        correo: email.value.trim(),
-        perfil: perfil ? perfil.value : "",
-        necesidad: necesidad ? necesidad.value : "",
-        interes: interes ? interes.value : "",
-        plan: plan ? plan.value : "",
-        origen: "Landing HotelFlow",
+      const datos = {
+        CI: ci.value.trim(),
+        Nombre: nombre.value.trim(),
+        CorreoElectronico: email.value.trim(),
+        Contrasenia: contrasena.value,
       };
 
       try {
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.textContent = "Enviando...";
+          submitBtn.textContent = "Registrando...";
         }
 
-        const response = await fetch(FORMSPREE_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
+        const response = await fetch(
+          "https://localhost:7039/api/Usuarios/crear",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(datos),
           },
-          body: JSON.stringify(data),
-        });
+        );
 
         if (!response.ok) {
-          throw new Error("No se pudo enviar el formulario.");
+          throw new Error("No se pudo registrar el usuario.");
         }
 
         if (formOk) {
-          formOk.textContent =
-            "¡Gracias! Tu informacion se envio correctamente.";
+          formOk.textContent = "¡Registro realizado correctamente!";
+          formOk.hidden = false;
         }
 
         demoForm.reset();
       } catch (error) {
         if (formOk) {
           formOk.textContent =
-            "No se pudo enviar. Verifica tu conexion e intenta nuevamente.";
+            "No se pudo registrar. Verifica que el backend .NET este ejecutandose.";
+          formOk.hidden = false;
         }
+
+        console.error(error);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = "Enviar solicitud";
+          submitBtn.textContent = "Crear cuenta";
         }
       }
     });
