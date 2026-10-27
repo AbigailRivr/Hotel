@@ -1584,7 +1584,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const response = await fetch(
-          "https://localhost:7039/api/Usuarios/crear",
+          "https://91b0z3wh-7039.brs.devtunnels.ms/api/Usuarios/crear",
           {
             method: "POST",
             headers: {
